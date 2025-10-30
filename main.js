@@ -21,11 +21,28 @@ class QuizManager {
             dom.div().add_classes(["control-button", "reset-all-button"]).text("Reset All").parent(this.container_element)
             .event("click", () => this.reset())
         );
+        dom.div().add_class("admin-container").parent(this.container_element)
+        .add_child(
+            dom.div().add_classes(["control-button", "admin-button"]).text("Admin").parent(this.container_element)
+            
+        ).add_child(
+            dom.input().add_class("password-input")
+        ).add_child(
+            dom.div().add_class("control-buttons-container")
+            .add_child(
+                dom.div().add_classes(["control-button", "login-button"]).text("Admin Login")
+                .event("click", () => this.admin_login())
+            ).add_child(
+                dom.div().add_classes(["control-button", "logout-button"]).text("Admin Logout")
+                .event("click", () => this.admin_logout())
+            )
+        );      
         this.update_score_element();
 
         this.end_element = dom.div().add_class("end").text("Quiz Completed!");
         this.initialized_flag = false;
         this.end_flag = false;
+        this.admin_logged_in_flag = false;
     }
     add_quiz(quiz_form) { this.quiz_forms.push(quiz_form); }
     add_quizzes(quiz_forms) { quiz_forms.forEach(quiz_form => this.add_quiz(quiz_form)); }
@@ -82,6 +99,20 @@ class QuizManager {
             quiz_form.reset();
         }
         this.initialize();
+    }
+    admin_login() {
+        if (this.admin_logged_in_flag) return;
+        this.admin_logged_in_flag = true;
+        for (let quiz_form of this.quiz_forms) 
+            quiz_form.show_explanation();
+        console.log("Admin logged in.");
+    }
+    admin_logout() {
+        if (!this.admin_logged_in_flag) return;
+        this.admin_logged_in_flag = false;
+        for (let quiz_form of this.quiz_forms) 
+            quiz_form.hide_explanation();
+        console.log("Admin logged out.");
     }
 }
 
