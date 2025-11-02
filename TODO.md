@@ -1,0 +1,1 @@
+- fix the hidden class getting ignored on admin input and control buttons container

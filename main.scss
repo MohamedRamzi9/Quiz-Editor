@@ -8,7 +8,7 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 .control-button {
     border: none;
@@ -93,32 +93,36 @@ body {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        width: 150px;
+        width: 200px;
 
         .admin-button {
             background-color: #17a2b8;
             color: white;
-            width: 100%;
+            text-align: center;
         }
         .password-input {
+            all: unset;
+            display: flex;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 100%;
         }
         .control-buttons-container {
             display: flex;
             flex-direction: row;
             gap: 5px;
             width: 100%;
+            text-align: center;
 
             .login-button {
                 background-color: #28a745;
                 color: white;
+                width: fit-content;
             }
             .logout-button {
                 background-color: #dc3545;
                 color: white;
+                width: fit-content;
             }
         }
     }

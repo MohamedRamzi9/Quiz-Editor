@@ -21,28 +21,32 @@ class QuizManager {
             dom.div().add_classes(["control-button", "reset-all-button"]).text("Reset All").parent(this.container_element)
             .event("click", () => this.reset())
         );
-        dom.div().add_class("admin-container").parent(this.container_element)
+
+        let admin_container_element = dom.div().add_class("admin-container").parent(this.container_element)
         .add_child(
             dom.div().add_classes(["control-button", "admin-button"]).text("Admin").parent(this.container_element)
+            .event("click", () => {
+                if (this.admin_controls_shown_flag) 
+                    this.hide_admin_controls();
+                else 
+                    this.show_admin_controls();
+            })
+        );
+        this.admin_password_input_element = dom.input().parent(admin_container_element).add_class("password-input");
+        this.admin_control_buttons_container_element = dom.div().add_class("control-buttons-container").parent(admin_container_element);
+        let admin_login_button_element = dom.div().parent(this.admin_control_buttons_container_element).add_classes(["control-button", "login-button"]).text("Admin Login")
+            .event("click", () => this.admin_login());
+        let admin_logout_button_element = dom.div().parent(this.admin_control_buttons_container_element).add_classes(["control-button", "logout-button"]).text("Admin Logout")
+            .event("click", () => this.admin_logout());
             
-        ).add_child(
-            dom.input().add_class("password-input")
-        ).add_child(
-            dom.div().add_class("control-buttons-container")
-            .add_child(
-                dom.div().add_classes(["control-button", "login-button"]).text("Admin Login")
-                .event("click", () => this.admin_login())
-            ).add_child(
-                dom.div().add_classes(["control-button", "logout-button"]).text("Admin Logout")
-                .event("click", () => this.admin_logout())
-            )
-        );      
         this.update_score_element();
+        this.hide_admin_controls();
 
         this.end_element = dom.div().add_class("end").text("Quiz Completed!");
         this.initialized_flag = false;
         this.end_flag = false;
         this.admin_logged_in_flag = false;
+        this.admin_controls_shown_flag = false;
     }
     add_quiz(quiz_form) { this.quiz_forms.push(quiz_form); }
     add_quizzes(quiz_forms) { quiz_forms.forEach(quiz_form => this.add_quiz(quiz_form)); }
@@ -102,7 +106,10 @@ class QuizManager {
     }
     admin_login() {
         if (this.admin_logged_in_flag) return;
+        let input_value = this.admin_password_input_element.get_value();
+        if (input_value !== "admin") return;
         this.admin_logged_in_flag = true;
+        this.admin_password_input_element.value("");
         for (let quiz_form of this.quiz_forms) 
             quiz_form.show_explanation();
         console.log("Admin logged in.");
@@ -113,6 +120,16 @@ class QuizManager {
         for (let quiz_form of this.quiz_forms) 
             quiz_form.hide_explanation();
         console.log("Admin logged out.");
+    }
+    show_admin_controls() { 
+        this.admin_controls_shown_flag = true;
+        this.admin_password_input_element.remove_class("hidden");
+        this.admin_control_buttons_container_element.remove_class("hidden"); 
+    }
+    hide_admin_controls() { 
+        this.admin_controls_shown_flag = false;
+        this.admin_password_input_element.add_class("hidden");
+        this.admin_control_buttons_container_element.add_class("hidden"); 
     }
 }
 
@@ -170,6 +187,7 @@ class QuizForm {
     }
     get_elem() { return this.form_element.get_elem(); }
 }
+
 
 
 dom.on_page_load(() => {

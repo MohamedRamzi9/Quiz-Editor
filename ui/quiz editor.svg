@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="quiz editor.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#006569"
+     bordercolor="#58e2c1"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="false"
+     inkscape:deskcolor="#006569"
+     inkscape:document-units="mm"
+     showborder="false"
+     inkscape:zoom="0.18015946"
+     inkscape:cx="516.20936"
+     inkscape:cy="377.44341"
+     inkscape:window-width="1366"
+     inkscape:window-height="745"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1" />
+  <g
+     id="g3-8"
+     transform="translate(4.8879547,11.209084)">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path2-2" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="M 30.536667,123.57692 H 18.075127"
+       id="path3-4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path57" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g15"
+       transform="translate(-115.26923)">
+      <rect
+         style="fill:#ffffff;stroke-width:3;stroke-linecap:square"
+         id="rect1"
+         width="150.05768"
+         height="196.26924"
+         x="-23.884615"
+         y="42.576923" />
+      <text
+         xml:space="preserve"
+         style="font-size:13.7964px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:3;stroke-linecap:square"
+         x="23.713083"
+         y="61.081715"
+         id="text1"><tspan
+           sodipodi:role="line"
+           id="tspan1"
+           style="font-size:13.7964px;fill:#000000;stroke-width:3"
+           x="23.713083"
+           y="61.081715">Question</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:3;stroke-linecap:square"
+         x="6.0892639"
+         y="97.751091"
+         id="text2"><tspan
+           sodipodi:role="line"
+           id="tspan2"
+           style="font-size:14.1111px;stroke-width:3"
+           x="6.0892639"
+           y="97.751091">option 1</tspan></text>
+      <g
+         id="g3"
+         transform="translate(29.754936,58.833498)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path2" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path3" />
+      </g>
+      <g
+         id="g5"
+         transform="rotate(45,87.37744,170.13257)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path4" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path5" />
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:3;stroke-linecap:square"
+         x="6.0892639"
+         y="132.19188"
+         id="text5"><tspan
+           sodipodi:role="line"
+           id="tspan5"
+           style="font-size:14.1111px;stroke-width:3"
+           x="6.0892639"
+           y="132.19188">option 2</tspan></text>
+      <g
+         id="g7"
+         transform="rotate(45,45.803721,187.35297)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path6" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path7" />
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:3;stroke-linecap:square"
+         x="6.0892639"
+         y="168.29868"
+         id="text7"><tspan
+           sodipodi:role="line"
+           id="tspan7"
+           style="font-size:14.1111px;stroke-width:3"
+           x="6.0892639"
+           y="168.29868">option 3</tspan></text>
+      <g
+         id="g9"
+         transform="rotate(45,2.2189472,205.40638)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path8" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path9" />
+      </g>
+      <path
+         style="fill:none;stroke:#008000;stroke-width:3;stroke-linecap:square"
+         d="m 90.108154,92.6822 4.227714,5.64857 10.641922,-11.66429"
+         id="path10"
+         sodipodi:nodetypes="ccc" />
+      <path
+         style="fill:none;stroke:#ff0000;stroke-width:3;stroke-linecap:square"
+         d="m 90.108154,125.58308 4.227714,5.64857 10.641922,-11.66429"
+         id="path11"
+         sodipodi:nodetypes="ccc" />
+      <path
+         style="fill:none;stroke:#008000;stroke-width:3;stroke-linecap:square"
+         d="m 90.108154,161.68989 4.227714,5.64857 10.641922,-11.66429"
+         id="path12"
+         sodipodi:nodetypes="ccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:14.1111px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#008000;stroke:none;stroke-width:3;stroke-linecap:square"
+         x="18.368286"
+         y="203.65958"
+         id="text12"><tspan
+           sodipodi:role="line"
+           id="tspan12"
+           style="fill:#008000;stroke:none;stroke-width:3"
+           x="18.368286"
+           y="203.65958">Explication</tspan></text>
+      <g
+         id="g14"
+         transform="rotate(45,-86.411852,209.39623)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path13" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path14" />
+      </g>
+      <g
+         id="g79"
+         transform="translate(29.754936,22.445558)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path78" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path79" />
+      </g>
+      <g
+         id="g81"
+         transform="translate(29.754936,-15.48893)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path80" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path81" />
+      </g>
+      <g
+         id="g83"
+         transform="translate(29.754936,-46.760306)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="m 24.305897,117.34615 v 12.46154"
+           id="path82" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+           d="M 30.536667,123.57692 H 18.075127"
+           id="path83" />
+      </g>
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g15"
+       id="use76"
+       transform="translate(186.63772)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g15"
+       id="use77"
+       transform="translate(373.27543)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g15"
+       id="use78"
+       transform="translate(0,205.87501)" />
+  </g>
+  <g
+     id="g60"
+     transform="translate(191.52567,11.209084)">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path58" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="M 30.536667,123.57692 H 18.075127"
+       id="path59" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path60" />
+  </g>
+  <g
+     id="g76"
+     transform="translate(-181.74976,11.209084)">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path74" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="M 30.536667,123.57692 H 18.075127"
+       id="path75" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path76" />
+  </g>
+  <g
+     id="g86"
+     transform="translate(4.8879547,215.27886)">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path84" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="M 30.536667,123.57692 H 18.075127"
+       id="path85" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square"
+       d="m 24.305897,117.34615 v 12.46154"
+       id="path86" />
+  </g>
+</svg>
