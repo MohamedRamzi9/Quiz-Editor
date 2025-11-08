@@ -13,19 +13,19 @@ class QuizManager {
         dom.div().add_class("buttons-container").parent(this.container_element)
         .add_child(
             dom.div().add_classes(["control-button", "previous-button"]).text("Previous").parent(this.container_element)
-            .event("click", () => this.show_previous_quiz())
+            .add_event("click", () => this.show_previous_quiz())
         ).add_child(
             dom.div().add_classes(["control-button", "next-button"]).text("Next").parent(this.container_element)
-            .event("click", () => this.show_next_quiz())
+            .add_event("click", () => this.show_next_quiz())
         ).add_child(
             dom.div().add_classes(["control-button", "reset-all-button"]).text("Reset All").parent(this.container_element)
-            .event("click", () => this.reset())
+            .add_event("click", () => this.reset())
         );
 
         let admin_container_element = dom.div().add_class("admin-container").parent(this.container_element)
         .add_child(
             dom.div().add_classes(["control-button", "admin-button"]).text("Admin").parent(this.container_element)
-            .event("click", () => {
+            .add_event("click", () => {
                 if (this.admin_controls_shown_flag) 
                     this.hide_admin_controls();
                 else 
@@ -35,9 +35,9 @@ class QuizManager {
         this.admin_password_input_element = dom.input().parent(admin_container_element).add_class("password-input");
         this.admin_control_buttons_container_element = dom.div().add_class("control-buttons-container").parent(admin_container_element);
         let admin_login_button_element = dom.div().parent(this.admin_control_buttons_container_element).add_classes(["control-button", "login-button"]).text("Admin Login")
-            .event("click", () => this.admin_login());
+            .add_event("click", () => this.admin_login());
         let admin_logout_button_element = dom.div().parent(this.admin_control_buttons_container_element).add_classes(["control-button", "logout-button"]).text("Admin Logout")
-            .event("click", () => this.admin_logout());
+            .add_event("click", () => this.admin_logout());
             
         this.update_score_element();
         this.hide_admin_controls();
@@ -148,7 +148,7 @@ class QuizForm {
         dom.div().add_class("quiz-question").parent(this.form_element).text(this.question);
         for (let i=0; i<this.options.length; i++) {
             this.option_elements[i] = dom.div().add_class("quiz-option").parent(this.form_element).text(this.options[i])
-            .event("click", () => {
+            .add_event("click", () => {
                 if (this.is_quiz_answered) return;
                 this.is_quiz_answered = true;
                 if (i === this.correct_option_index)
@@ -163,7 +163,7 @@ class QuizForm {
             });
         }
         dom.div().text("Reset Quiz").parent(this.form_element).add_classes(["control-button", "reset-button"])
-        .event("click", () => this.reset());
+        .add_event("click", () => this.reset());
         this.explanation_element = dom.div().text(explanation).parent(this.form_element).add_classes(["explanation", "hidden"]);
     }
     show_explanation() {
