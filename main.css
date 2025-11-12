@@ -124,3 +124,69 @@ body {
   width: -moz-fit-content;
   width: fit-content;
 }
+
+.quiz-editor {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 15px;
+  border: #007bff 2px solid;
+  gap: 10px;
+}
+.quiz-editor .quiz-component {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  width: 350px;
+}
+.quiz-editor .quiz-component .question {
+  font-weight: bold;
+}
+.quiz-editor .quiz-component .options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.quiz-editor .quiz-component .options .option-container {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.quiz-editor .quiz-component .options .option-container .option {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #888;
+  border-radius: 3px;
+  background-color: #f1f1f1;
+}
+.quiz-editor .quiz-component .options .option-container .option.selected {
+  background-color: #28a745 !important;
+}
+.quiz-editor .quiz-component .options .option-container .option-button {
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: auto 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 4px;
+  background-color: #dc3545;
+}
+.quiz-editor .quiz-component .options .option-container .option-button.selected {
+  background-color: #28a745 !important;
+}
+.quiz-editor .quiz-component .question-label, .quiz-editor .quiz-component .correct-option-label, .quiz-editor .quiz-component .explanation-label {
+  font-style: italic;
+  color: #555;
+}
+.quiz-editor .quiz-component .explanation, .quiz-editor .quiz-component .correct-option, .quiz-editor .quiz-component .question {
+  border: 1px solid #888;
+  border-radius: 3px;
+  padding: 8px;
+}

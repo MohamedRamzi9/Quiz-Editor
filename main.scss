@@ -127,3 +127,73 @@ body {
         }
     }
 }
+
+.quiz-editor {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 15px;
+    border: #007bff 2px solid;
+    gap: 10px;
+
+    .quiz-component {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        width: 350px;
+
+        .question {
+            font-weight: bold;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .option-container {
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+
+                .option {
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid #888;
+                    border-radius: 3px;
+                    background-color: #f1f1f1;
+
+                    &.selected {
+                        background-color: #28a745 !important;
+                    }
+                }
+                .option-button {
+                    height: fit-content;
+                    margin: auto 0;
+                    user-select: none;
+                    cursor: pointer;
+                    width: fit-content;
+                    padding: 4px;
+                    background-color: #dc3545;
+                    
+                    &.selected {
+                        background-color: #28a745 !important;
+                    }
+                }
+                
+            }
+        }
+
+        .question-label, .correct-option-label, .explanation-label {
+            font-style: italic;
+            color: #555;
+        }
+        .explanation, .correct-option, .question {
+            border: 1px solid #888;
+            border-radius: 3px;
+            padding: 8px;
+        }
+    }
+}
