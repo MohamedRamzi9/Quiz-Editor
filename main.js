@@ -190,21 +190,28 @@ class QuizInfo {
     constructor() {
         this._question = "";
         this._options = [];
-        this._correct_option_index = -1;
+        this._correct_option_indices = [];
         this._explanation = "";
     }
     question(question) { this._question = question; return this; }
     options(options) { this._options = options; return this; }
     add_option(option) { this._options.push(option); return this; }
     option_at(index, option) { this._options[index] = option; return this; }
-    correct_option_index(correct_option_index) { this._correct_option_index = correct_option_index; return this; }
+    correct_option_indices(correct_option_indices) { this._correct_option_indices = correct_option_indices; return this; }
+    add_correct_option_index(correct_option_index) { this._correct_option_indices.push(correct_option_index); return this; }
+    remove_correct_option_index(correct_option_index) { 
+        this._correct_option_indices = this._correct_option_indices.filter(index => index !== correct_option_index);
+        return this;
+    }
+    remove_option_at(index) { this._options.splice(index, 1); return this; }
+    remove_option(option) { this._options = this._options.filter(opt => opt !== option); return this; }
     explanation(explanation) { this._explanation = explanation; return this; }
 
     get_question() { return this._question; }
     get_options() { return this._options; }
     get_option_at(index) { return this._options[index]; }
-    get_correct_option_index() { return this._correct_option_index; }
-    get_correct_option() { return this._options[this._correct_option_index]; }
+    get_correct_option_indices() { return this._correct_option_indices; }
+    get_correct_option(index) { return this._options[this._correct_option_indices[index]]; }
     get_explanation() { return this._explanation; }
 }
 
@@ -235,6 +242,35 @@ class QuizEditor {
         }
     }
     get_elem() { return this.element.get_elem(); }
+    quiz_option_component(options_container_element, quiz_info, index, option) {
+        let option_add_button = dom.div().add_class("option-add-button").parent(options_container_element).text("+");
+        let option_container_element = dom.div().add_class("option-container").parent(options_container_element);
+        let option_element = dom.div().add_class("option").text(option).parent(option_container_element).content_editable(true).add_event("input", e => quiz_info.option_at(index, e.target.innerText));
+        let option_select_button = dom.div().add_class("option-button").text("X").parent(option_container_element);
+        if (quiz_info.get_correct_option_indices().includes(index)) {
+            option_element.add_class("selected");
+            option_select_button.add_class("selected");
+        }
+        option_select_button.add_event("click", () => {
+            if (option_select_button.has_class("selected")) {
+                option_select_button.remove_class("selected");
+                option_element.remove_class("selected");
+                quiz_info.remove_correct_option_index(index);
+            } else {
+                option_select_button.add_class("selected");
+                option_element.add_class("selected");
+                quiz_info.add_correct_option_index(index);
+            }
+        });
+        let option_remove_button = dom.div().add_classes(["option-button", "option-remove-button"]).parent(option_container_element).text("-")
+        .add_event("click", () => {
+            options_container_element.remove_child(option_container_element);
+            quiz_info.remove_option(option);
+            quiz_info.remove_correct_option_index(index);
+            options_container_element.remove_child(option_add_button);
+        });
+        return option_container_element;
+    }
     quiz_component(quiz_info) {
         let container_element = dom.div().add_class("quiz-component");
         dom.div().add_class("question-label").text("Question:").parent(container_element);
@@ -242,29 +278,13 @@ class QuizEditor {
         let options_container_element = dom.div().add_class("options").parent(container_element);
         
         for (let [index, option] of quiz_info.get_options().entries()) {
-            let option_container_element = dom.div().add_class("option-container").parent(options_container_element);
-            
-            let option_element = dom.div().add_class("option").text(option).parent(option_container_element).content_editable(true).add_event("input", e => quiz_info.option_at(index, e.target.innerText));
-            if (index === quiz_info.get_correct_option_index()) option_element.add_class("selected");
-
-            let option_button = dom.div().add_class("option-button").text("X").parent(option_container_element);
-            if (index === quiz_info.get_correct_option_index()) option_button.add_class("selected");
-            option_button.add_event("click", () => {
-                if (option_button.has_class("selected")) {
-                    option_button.remove_class("selected");
-                    option_element.remove_class("selected");
-                    quiz_info.correct_option_index(-1);
-                } else {
-                    option_button.add_class("selected");
-                    option_element.add_class("selected");
-                    quiz_info.correct_option_index(index);
-                }
-            });
+            options_container_element.add_child(
+                this.quiz_option_component(options_container_element, quiz_info, index, option)
+            );
         }
-        dom.div().add_class("correct-option-label").text("Correct Option:").parent(container_element);
-        dom.div().add_class("correct-option").text(`Correct Option: ${quiz_info.get_correct_option()}`).parent(container_element).content_editable(true);
         dom.div().add_class("explanation-label").text("Explanation:").parent(container_element);
-        dom.div().add_class("explanation").text(quiz_info.get_explanation()).parent(container_element).content_editable(true);
+        dom.div().add_class("explanation").text(quiz_info.get_explanation()).parent(container_element).content_editable(true)
+        .add_event("input", e => quiz_info.explanation(e.target.innerText));
         return container_element;
     }
 }
@@ -275,12 +295,12 @@ dom.on_page_load(() => {
 
     let quiz_manager = new QuizManager();
     quiz_manager.add_quiz_infos([
-        new QuizInfo().question("What is the capital of France?").options(["Berlin", "Madrid", "Paris", "Rome"]).correct_option_index(2).explanation("Paris is the capital and most populous city of France."),
-        new QuizInfo().question("Which planet is known as the Red Planet?").options(["Earth", "Mars", "Jupiter", "Saturn"]).correct_option_index(1).explanation("Mars is often called the 'Red Planet' because of its reddish appearance."),
-        new QuizInfo().question("What is the largest ocean on Earth?").options(["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"]).correct_option_index(3).explanation("The Pacific Ocean is the largest and deepest of Earth's oceanic divisions."),
-        new QuizInfo().question("Who wrote 'Romeo and Juliet'?").options(["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"]).correct_option_index(1).explanation("'Romeo and Juliet' is a tragedy written by William Shakespeare early in his career."),
-        new QuizInfo().question("What is the chemical symbol for gold?").options(["Au", "Ag", "Fe", "Pb"]).correct_option_index(0).explanation("The chemical symbol for gold is 'Au', derived from the Latin word 'Aurum'."),
-        new QuizInfo().question("Which organ in the human body is responsible for pumping blood?").options(["Lungs", "Liver", "Heart", "Kidneys"]).correct_option_index(2).explanation("The heart is a muscular organ that pumps blood through the blood vessels of the circulatory system."),
+        new QuizInfo().question("What is the capital of France?").options(["Berlin", "Madrid", "Paris", "Rome"]).correct_option_indices([1, 2]).explanation("Paris is the capital and most populous city of France."),
+        new QuizInfo().question("Which planet is known as the Red Planet?").options(["Earth", "Mars", "Jupiter", "Saturn"]).correct_option_indices([1]).explanation("Mars is often called the 'Red Planet' because of its reddish appearance."),
+        new QuizInfo().question("What is the largest ocean on Earth?").options(["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"]).correct_option_indices([3]).explanation("The Pacific Ocean is the largest and deepest of Earth's oceanic divisions."),
+        new QuizInfo().question("Who wrote 'Romeo and Juliet'?").options(["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"]).correct_option_indices([1]).explanation("'Romeo and Juliet' is a tragedy written by William Shakespeare early in his career."),
+        new QuizInfo().question("What is the chemical symbol for gold?").options(["Au", "Ag", "Fe", "Pb"]).correct_option_indices([0]).explanation("The chemical symbol for gold is 'Au', derived from the Latin word 'Aurum'."),
+        new QuizInfo().question("Which organ in the human body is responsible for pumping blood?").options(["Lungs", "Liver", "Heart", "Kidneys"]).correct_option_indices([2]).explanation("The heart is a muscular organ that pumps blood through the blood vessels of the circulatory system."),
     ]);
     
     // let quiz_player = new QuizPlayer();   

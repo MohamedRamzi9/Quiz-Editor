@@ -144,6 +144,7 @@ body {
         padding: 10px;
         border-radius: 5px;
         width: 350px;
+        background-color: #1f8fff2f;
 
         .question {
             font-weight: bold;
@@ -176,21 +177,37 @@ body {
                     cursor: pointer;
                     width: fit-content;
                     padding: 4px;
-                    background-color: #dc3545;
+                    background-color: #f1f1f1;
+                    border: 1px solid #888;
+                    border-radius: 3px;
                     
                     &.selected {
                         background-color: #28a745 !important;
                     }
+                    &.option-remove-button {
+                        background-color: #dc3545 !important;
+                        color: white;
+                        width: 19px;
+                        text-align: center;
+                    }
                 }
-                
+            }
+            .option-add-button {
+                align-self: center;
+                border-radius: 50%;
+                cursor: pointer;
+                user-select: none;
+                padding: 4px 8px;
+                background-color: #128cdc;
+                color: white;
             }
         }
 
-        .question-label, .correct-option-label, .explanation-label {
+        .question-label, .explanation-label {
             font-style: italic;
             color: #555;
         }
-        .explanation, .correct-option, .question {
+        .explanation, .question {
             border: 1px solid #888;
             border-radius: 3px;
             padding: 8px;

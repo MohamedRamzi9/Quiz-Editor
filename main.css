@@ -141,6 +141,7 @@ body {
   padding: 10px;
   border-radius: 5px;
   width: 350px;
+  background-color: rgba(31, 143, 255, 0.1843137255);
 }
 .quiz-editor .quiz-component .question {
   font-weight: bold;
@@ -176,16 +177,35 @@ body {
   width: -moz-fit-content;
   width: fit-content;
   padding: 4px;
-  background-color: #dc3545;
+  background-color: #f1f1f1;
+  border: 1px solid #888;
+  border-radius: 3px;
 }
 .quiz-editor .quiz-component .options .option-container .option-button.selected {
   background-color: #28a745 !important;
 }
-.quiz-editor .quiz-component .question-label, .quiz-editor .quiz-component .correct-option-label, .quiz-editor .quiz-component .explanation-label {
+.quiz-editor .quiz-component .options .option-container .option-button.option-remove-button {
+  background-color: #dc3545 !important;
+  color: white;
+  width: 19px;
+  text-align: center;
+}
+.quiz-editor .quiz-component .options .option-add-button {
+  align-self: center;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  padding: 4px 8px;
+  background-color: #128cdc;
+  color: white;
+}
+.quiz-editor .quiz-component .question-label, .quiz-editor .quiz-component .explanation-label {
   font-style: italic;
   color: #555;
 }
-.quiz-editor .quiz-component .explanation, .quiz-editor .quiz-component .correct-option, .quiz-editor .quiz-component .question {
+.quiz-editor .quiz-component .explanation, .quiz-editor .quiz-component .question {
   border: 1px solid #888;
   border-radius: 3px;
   padding: 8px;
