@@ -43,16 +43,19 @@ body {
 .quiz-form .quiz-option:hover {
   background-color: rgb(223.5, 223.5, 223.5);
 }
-.quiz-form .explanation {
-  align-self: center;
+.quiz-form .quiz-option.selected {
+  background-color: #4da2fe !important;
 }
-.quiz-form .correct-option {
+.quiz-form .quiz-option.correct-option {
   background-color: #d4edda;
   border-color: #28a745;
 }
-.quiz-form .wrong-option {
+.quiz-form .quiz-option.wrong-option {
   background-color: #f8d7da;
   border-color: #dc3545;
+}
+.quiz-form .explanation {
+  align-self: center;
 }
 .quiz-form .reset-button {
   background-color: #ffc107;

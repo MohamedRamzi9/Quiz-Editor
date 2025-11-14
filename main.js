@@ -1,6 +1,12 @@
 
 import * as dom from "./lib/Dom.js";
 
+function* zip(a, b) {
+  const len = Math.min(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    yield [a[i], b[i]];
+  }
+}
 
 class QuizPlayer {
     
@@ -52,8 +58,8 @@ class QuizPlayer {
     add_quizzes(quiz_forms) { quiz_forms.forEach(quiz_form => this.add_quiz(quiz_form)); }
     get_elem() { return this.container_element.get_elem(); }   
     update_score_element() { this.score_element.text(`Score: ${this.score}`); }
-    update_score_correct() { 
-        this.score += 1;
+    update_score(score) { 
+        this.score += score;
         this.update_score_element();
     }   
     set_end_flag(value) { this.end_flag = value; }
@@ -134,34 +140,56 @@ class QuizPlayer {
 }
 
 class QuizForm {
-    constructor(quiz_manager, quiz_info) {
-        this.quiz_manager = quiz_manager;
+    constructor(quiz_player, quiz_info) {
+        this.quiz_player = quiz_player;
         this.quiz_info = quiz_info;
         this.option_elements = [];
+        this.selected_option_count = 0;
         
         this.is_explanation_visible = false;
         this.is_quiz_answered = false;
         
         this.form_element = dom.div().add_class("quiz-form");
         dom.div().add_class("quiz-question").parent(this.form_element).text(this.quiz_info.get_question());
-        for (let i=0; i<this.quiz_info.get_options().length; i++) {
-            this.option_elements[i] = dom.div().add_class("quiz-option").parent(this.form_element).text(this.quiz_info.get_options()[i])
-            .add_event("click", () => {
+        for (let option of this.quiz_info.get_options()) {
+            let option_object = {
+                button: dom.div().add_class("quiz-option").parent(this.form_element).text(option.get_text()),
+                is_selected: false
+            };
+            this.option_elements.push(option_object);
+            option_object.button.add_event("click", () => {
                 if (this.is_quiz_answered) return;
-                this.is_quiz_answered = true;
-                if (i === this.quiz_info.get_correct_option_index())
-                    this.quiz_manager.update_score_correct();
-                for (let j=0; j<this.option_elements.length; j++) {
-                    if (j === this.quiz_info.get_correct_option_index())
-                        this.option_elements[j].add_class("correct-option");
-                    else
-                        this.option_elements[j].add_class("wrong-option");
+                if (option_object.is_selected) {
+                    option_object.is_selected = false;
+                    option_object.button.remove_class("selected");
+                } else {
+                    option_object.is_selected = true;
+                    option_object.button.add_class("selected");
                 }
-                this.show_explanation();
             });
         }
-        dom.div().text("Reset Quiz").parent(this.form_element).add_classes(["control-button", "reset-button"])
-        .add_event("click", () => this.reset());
+        dom.div().text("Confirm").parent(this.form_element).add_classes(["control-button", "reset-button"])
+        .add_event("click", () => {
+            let selected_count = 0, correct_selected_count = 0;
+            for (let [option_element, option] of zip(this.option_elements, this.quiz_info.get_options())) {
+                if (option_element.is_selected) {
+                    selected_count += 1;
+                    option_element.button.remove_class("selected");
+                    if (option.is_correct())
+                        correct_selected_count += 1;
+                }
+                if (option.is_correct()) {
+                    option_element.button.add_class("correct-option");
+                } else {
+                    option_element.button.add_class("wrong-option");
+                }
+            }
+            this.is_quiz_answered = true;
+            this.show_explanation();
+            let score = selected_count > 0 ? correct_selected_count / selected_count : 0;
+            this.quiz_player.update_score(score);
+        });
+       
         this.explanation_element = dom.div().text(this.quiz_info.get_explanation()).parent(this.form_element).add_classes(["explanation", "hidden"]);
     }
     show_explanation() {
@@ -177,8 +205,10 @@ class QuizForm {
 
     reset() {
         for (let option_element of this.option_elements) {
-            option_element.remove_class("correct-option");
-            option_element.remove_class("wrong-option");
+            option_element.button.remove_class("correct-option");
+            option_element.button.remove_class("wrong-option");
+            option_element.button.remove_class("selected");
+            option_element.is_selected = false;
         }
         this.hide_explanation();
         this.is_quiz_answered = false;
@@ -217,6 +247,12 @@ class QuizInfo {
     get_option_at(index) { return this._options[index]; }
     get_correct_option(index) { return this._options[this._correct_option_indices[index]]; }
     get_explanation() { return this._explanation; }
+    get_correct_option_count() { 
+        let count = 0;
+        for (let option of this._options)
+            if (option.is_correct()) count += 1;
+        return count;
+    }
 }
 
 class QuizManager {
@@ -228,6 +264,7 @@ class QuizManager {
     get_quiz_info(index) { return this.quiz_infos[index]; }
     get_quiz_infos() { return this.quiz_infos; }
     remove_quiz_info(index) { this.quiz_infos.splice(index, 1); }
+    insert_quiz_info_at(index, quiz_info) { this.quiz_infos.splice(index, 0, quiz_info); }
 }
 
 class QuizEditor {
@@ -280,22 +317,26 @@ class QuizEditor {
         dom.div().add_class("question").text(quiz_info.get_question()).parent(container_element).content_editable(true).add_event("input", e => quiz_info.question(e.target.innerText));
         let options_container_element = dom.div().add_class("options").parent(container_element);
         
-        let option_add_button_callback = (old_option) => {
-            let new_option = new QuizOption("New Option", false);
-            let index = quiz_info.get_option_index(old_option);
-            quiz_info.insert_option_at(index, new_option);
+        let option_add_button_component = () => {
             let option_add_button = dom.div().add_class("option-add-button").text("+")
-            .add_event("click", () => option_add_button_callback(new_option));
-            options_container_element.insert_child_at(index * 2, option_add_button);
-            options_container_element.insert_child_at(index * 2 + 1, 
+            .add_event("click", () => option_add_button_callback(option_add_button));
+            return option_add_button;
+        };
+        let option_add_button_callback = (old_option_add_button) => {
+            let new_option = new QuizOption("New Option", false);
+            let button_index = options_container_element.get_child_index(old_option_add_button);
+            quiz_info.insert_option_at(button_index / 2, new_option);
+            let option_add_button = option_add_button_component();
+            options_container_element.insert_child_at(button_index, option_add_button);
+            options_container_element.insert_child_at(button_index + 1, 
                 this.quiz_option_component(options_container_element, option_add_button, quiz_info, new_option));
         };
+
         for (let option of quiz_info.get_options()) {
-            let option_add_button = dom.div().add_class("option-add-button").parent(options_container_element).text("+")
-            .add_event("click", () => option_add_button_callback(option));
+            let option_add_button = option_add_button_component().parent(options_container_element);
             this.quiz_option_component(options_container_element, option_add_button, quiz_info, option).parent(options_container_element);
         }
-        
+        option_add_button_component().parent(options_container_element);        
 
         dom.div().add_class("explanation-label").text("Explanation:").parent(container_element);
         dom.div().add_class("explanation").text(quiz_info.get_explanation()).parent(container_element).content_editable(true)
@@ -331,15 +372,15 @@ dom.on_page_load(() => {
     ]);
     let quiz_editor = new QuizEditor(quiz_manager);
     quiz_editor.initialize();
-    body.add_child(quiz_editor);
-
-
-    // let quiz_player = new QuizPlayer();   
-    // for (let quiz_info of quiz_manager.get_quiz_infos()) {
-    //     quiz_player.add_quiz(new QuizForm(quiz_player, quiz_info));
-    // }
-    // quiz_player.initialize();
-
-
+    
+    
+    let quiz_player = new QuizPlayer();   
+    for (let quiz_info of quiz_manager.get_quiz_infos()) {
+        quiz_player.add_quiz(new QuizForm(quiz_player, quiz_info));
+    }
+    quiz_player.initialize();
+    
+        
+    body.add_child(quiz_player);
     
 });

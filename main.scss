@@ -42,18 +42,22 @@ body {
         &:hover {
             background-color: darken($background-color, 10%);
         }
+        &.selected {
+            background-color: #4da2fe !important;
+        }
+        &.correct-option {
+            background-color: #d4edda;
+            border-color: #28a745;
+        }
+        &.wrong-option {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+        }
     }
     .explanation {
         align-self: center;
     }
-    .correct-option {
-        background-color: #d4edda;
-        border-color: #28a745;
-    }
-    .wrong-option {
-        background-color: #f8d7da;
-        border-color: #dc3545;
-    }
+
     .reset-button {
         background-color: #ffc107;
         color: black;
