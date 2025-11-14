@@ -186,31 +186,35 @@ class QuizForm {
     get_elem() { return this.form_element.get_elem(); }
 }
 
+class QuizOption {
+    constructor(text, is_correct) {
+        this._text = text;
+        this._is_correct = is_correct;
+    }
+    text(text) { this._text = text; return this; }
+    correct(bool) { this._is_correct = bool; return this; }
+    get_text() { return this._text; }
+    is_correct() { return this._is_correct; }
+}
 class QuizInfo {
     constructor() {
         this._question = "";
         this._options = [];
-        this._correct_option_indices = [];
         this._explanation = "";
     }
     question(question) { this._question = question; return this; }
     options(options) { this._options = options; return this; }
     add_option(option) { this._options.push(option); return this; }
     option_at(index, option) { this._options[index] = option; return this; }
-    correct_option_indices(correct_option_indices) { this._correct_option_indices = correct_option_indices; return this; }
-    add_correct_option_index(correct_option_index) { this._correct_option_indices.push(correct_option_index); return this; }
-    remove_correct_option_index(correct_option_index) { 
-        this._correct_option_indices = this._correct_option_indices.filter(index => index !== correct_option_index);
-        return this;
-    }
     remove_option_at(index) { this._options.splice(index, 1); return this; }
     remove_option(option) { this._options = this._options.filter(opt => opt !== option); return this; }
     explanation(explanation) { this._explanation = explanation; return this; }
+    insert_option_at(index, option) { this._options.splice(index, 0, option); return this; }
 
+    get_option_index(option) { return this._options.indexOf(option); }
     get_question() { return this._question; }
     get_options() { return this._options; }
     get_option_at(index) { return this._options[index]; }
-    get_correct_option_indices() { return this._correct_option_indices; }
     get_correct_option(index) { return this._options[this._correct_option_indices[index]]; }
     get_explanation() { return this._explanation; }
 }
@@ -242,12 +246,11 @@ class QuizEditor {
         }
     }
     get_elem() { return this.element.get_elem(); }
-    quiz_option_component(options_container_element, quiz_info, index, option) {
-        let option_add_button = dom.div().add_class("option-add-button").parent(options_container_element).text("+");
-        let option_container_element = dom.div().add_class("option-container").parent(options_container_element);
-        let option_element = dom.div().add_class("option").text(option).parent(option_container_element).content_editable(true).add_event("input", e => quiz_info.option_at(index, e.target.innerText));
+    quiz_option_component(options_container_element, option_add_button, quiz_info, option) {
+        let option_container_element = dom.div().add_class("option-container");
+        let option_element = dom.div().add_class("option").text(option.get_text()).parent(option_container_element).content_editable(true).add_event("input", e => option.text(e.target.innerText));
         let option_select_button = dom.div().add_class("option-button").text("X").parent(option_container_element);
-        if (quiz_info.get_correct_option_indices().includes(index)) {
+        if (option.is_correct()) {
             option_element.add_class("selected");
             option_select_button.add_class("selected");
         }
@@ -255,18 +258,18 @@ class QuizEditor {
             if (option_select_button.has_class("selected")) {
                 option_select_button.remove_class("selected");
                 option_element.remove_class("selected");
-                quiz_info.remove_correct_option_index(index);
+                option.correct(false);
             } else {
                 option_select_button.add_class("selected");
                 option_element.add_class("selected");
-                quiz_info.add_correct_option_index(index);
+                option.correct(true);
             }
         });
         let option_remove_button = dom.div().add_classes(["option-button", "option-remove-button"]).parent(option_container_element).text("-")
         .add_event("click", () => {
             options_container_element.remove_child(option_container_element);
             quiz_info.remove_option(option);
-            quiz_info.remove_correct_option_index(index);
+            option.correct(false);
             options_container_element.remove_child(option_add_button);
         });
         return option_container_element;
@@ -277,10 +280,17 @@ class QuizEditor {
         dom.div().add_class("question").text(quiz_info.get_question()).parent(container_element).content_editable(true).add_event("input", e => quiz_info.question(e.target.innerText));
         let options_container_element = dom.div().add_class("options").parent(container_element);
         
-        for (let [index, option] of quiz_info.get_options().entries()) {
-            options_container_element.add_child(
-                this.quiz_option_component(options_container_element, quiz_info, index, option)
-            );
+        for (let option of quiz_info.get_options()) {
+            let option_add_button_callback = () => {
+                let new_option = new QuizOption("New Option", false);
+                quiz_info.add_option(new_option);
+                let option_add_button = dom.div().parent(options_container_element).add_class("option-add-button").text("+")
+                .add_event("click", option_add_button_callback);
+                options_container_element.add_child(this.quiz_option_component(options_container_element, option_add_button, quiz_info, new_option));
+            };
+            let option_add_button = dom.div().add_class("option-add-button").parent(options_container_element).text("+")
+            .add_event("click", option_add_button_callback);
+            this.quiz_option_component(options_container_element, option_add_button, quiz_info, option).parent(options_container_element)
         }
         dom.div().add_class("explanation-label").text("Explanation:").parent(container_element);
         dom.div().add_class("explanation").text(quiz_info.get_explanation()).parent(container_element).content_editable(true)
@@ -295,22 +305,36 @@ dom.on_page_load(() => {
 
     let quiz_manager = new QuizManager();
     quiz_manager.add_quiz_infos([
-        new QuizInfo().question("What is the capital of France?").options(["Berlin", "Madrid", "Paris", "Rome"]).correct_option_indices([1, 2]).explanation("Paris is the capital and most populous city of France."),
-        new QuizInfo().question("Which planet is known as the Red Planet?").options(["Earth", "Mars", "Jupiter", "Saturn"]).correct_option_indices([1]).explanation("Mars is often called the 'Red Planet' because of its reddish appearance."),
-        new QuizInfo().question("What is the largest ocean on Earth?").options(["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"]).correct_option_indices([3]).explanation("The Pacific Ocean is the largest and deepest of Earth's oceanic divisions."),
-        new QuizInfo().question("Who wrote 'Romeo and Juliet'?").options(["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"]).correct_option_indices([1]).explanation("'Romeo and Juliet' is a tragedy written by William Shakespeare early in his career."),
-        new QuizInfo().question("What is the chemical symbol for gold?").options(["Au", "Ag", "Fe", "Pb"]).correct_option_indices([0]).explanation("The chemical symbol for gold is 'Au', derived from the Latin word 'Aurum'."),
-        new QuizInfo().question("Which organ in the human body is responsible for pumping blood?").options(["Lungs", "Liver", "Heart", "Kidneys"]).correct_option_indices([2]).explanation("The heart is a muscular organ that pumps blood through the blood vessels of the circulatory system."),
+        new QuizInfo().question("What is the capital of France?")
+            .options([new QuizOption("Berlin", false), new QuizOption("Madrid", false), new QuizOption("Paris", true), new QuizOption("Rome", false)])
+            .explanation("Paris is the capital and most populous city of France."),
+        new QuizInfo().question("Which planet is known as the Red Planet?")
+            .options([new QuizOption("Earth", false), new QuizOption("Mars", true), new QuizOption("Jupiter", false), new QuizOption("Saturn", false)])
+            .explanation("Mars is often called the 'Red Planet' because of its reddish appearance."),
+        new QuizInfo().question("What is the largest ocean on Earth?")
+            .options([new QuizOption("Atlantic Ocean", false), new QuizOption("Indian Ocean", false), new QuizOption("Arctic Ocean", false), new QuizOption("Pacific Ocean", true)])
+            .explanation("The Pacific Ocean is the largest and deepest of Earth's oceanic divisions."),
+        new QuizInfo().question("Who wrote 'Romeo and Juliet'?")
+            .options([new QuizOption("Charles Dickens", false), new QuizOption("William Shakespeare", true), new QuizOption("Mark Twain", false), new QuizOption("Jane Austen", false)])
+            .explanation("'Romeo and Juliet' is a tragedy written by William Shakespeare early in his career."),
+        new QuizInfo().question("What is the chemical symbol for gold?")
+            .options([new QuizOption("Au", true), new QuizOption("Ag", false), new QuizOption("Fe", false), new QuizOption("Pb", false)])
+            .explanation("The chemical symbol for gold is 'Au', derived from the Latin word 'Aurum'."),
+        new QuizInfo().question("Which organ in the human body is responsible for pumping blood?")
+            .options([new QuizOption("Lungs", false), new QuizOption("Liver", false), new QuizOption("Heart", true), new QuizOption("Kidneys", false)])
+            .explanation("The heart is a muscular organ that pumps blood through the blood vessels of the circulatory system."),
     ]);
-    
+    let quiz_editor = new QuizEditor(quiz_manager);
+    quiz_editor.initialize();
+    body.add_child(quiz_editor);
+
+
     // let quiz_player = new QuizPlayer();   
     // for (let quiz_info of quiz_manager.get_quiz_infos()) {
     //     quiz_player.add_quiz(new QuizForm(quiz_player, quiz_info));
     // }
     // quiz_player.initialize();
 
-    let quiz_editor = new QuizEditor(quiz_manager);
-    quiz_editor.initialize();
-    body.add_child(quiz_editor);
+
     
 });

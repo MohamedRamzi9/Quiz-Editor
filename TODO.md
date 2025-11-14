@@ -1,3 +1,2 @@
-- fix removing selected option causing wrong option to be selected when refreshing
-- extract quiz option part without the add button into its own lambda function
+
 - implement the add option button to insert new option component before itself when clicked

@@ -1,4 +1,10 @@
 
+
+# 14-11-2025
+- fixed removing selected option causing wrong option to be selected when refreshing
+- changed `quiz_option_component` method to return the element instead of adding it to the parent directly
+- moved the add option button creation and event binding outside of the `quiz_option_component` method  
+
 # 13-11-2025
 - added option add button to without functionality
 - extracted quiz option component into its own method `quiz_option_component`
