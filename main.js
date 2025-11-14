@@ -280,18 +280,23 @@ class QuizEditor {
         dom.div().add_class("question").text(quiz_info.get_question()).parent(container_element).content_editable(true).add_event("input", e => quiz_info.question(e.target.innerText));
         let options_container_element = dom.div().add_class("options").parent(container_element);
         
+        let option_add_button_callback = (old_option) => {
+            let new_option = new QuizOption("New Option", false);
+            let index = quiz_info.get_option_index(old_option);
+            quiz_info.insert_option_at(index, new_option);
+            let option_add_button = dom.div().add_class("option-add-button").text("+")
+            .add_event("click", () => option_add_button_callback(new_option));
+            options_container_element.insert_child_at(index * 2, option_add_button);
+            options_container_element.insert_child_at(index * 2 + 1, 
+                this.quiz_option_component(options_container_element, option_add_button, quiz_info, new_option));
+        };
         for (let option of quiz_info.get_options()) {
-            let option_add_button_callback = () => {
-                let new_option = new QuizOption("New Option", false);
-                quiz_info.add_option(new_option);
-                let option_add_button = dom.div().parent(options_container_element).add_class("option-add-button").text("+")
-                .add_event("click", option_add_button_callback);
-                options_container_element.add_child(this.quiz_option_component(options_container_element, option_add_button, quiz_info, new_option));
-            };
             let option_add_button = dom.div().add_class("option-add-button").parent(options_container_element).text("+")
-            .add_event("click", option_add_button_callback);
-            this.quiz_option_component(options_container_element, option_add_button, quiz_info, option).parent(options_container_element)
+            .add_event("click", () => option_add_button_callback(option));
+            this.quiz_option_component(options_container_element, option_add_button, quiz_info, option).parent(options_container_element);
         }
+        
+
         dom.div().add_class("explanation-label").text("Explanation:").parent(container_element);
         dom.div().add_class("explanation").text(quiz_info.get_explanation()).parent(container_element).content_editable(true)
         .add_event("input", e => quiz_info.explanation(e.target.innerText));

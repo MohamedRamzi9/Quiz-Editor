@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Button Insert Test</title>
+  <style>
+    #container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 20px;
+    }
+    button {
+      padding: 8px 14px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="container">
+  <button id="btn1">Button 1</button>
+  <button id="btn2">Button 2</button>
+  <button id="btn3">Button 3</button>
+</div>
+
+<script>
+  function handleClick(self) {
+    const container = self.parentNode;
+
+    // Create new button
+    let newBtn = document.createElement("button");
+    newBtn.textContent = "New Button";
+
+    // Self-referencing callback through closure
+    newBtn.onclick = () => handleClick(newBtn);
+
+    // Insert before the clicked button
+    container.insertBefore(newBtn, self);
+  }
+
+  // Initialize event listeners for existing buttons
+  document.querySelectorAll("#container button").forEach(btn => {
+    btn.onclick = () => handleClick(btn);
+  });
+</script>
+
+</body>
+</html>
