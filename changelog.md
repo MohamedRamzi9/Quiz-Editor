@@ -1,4 +1,9 @@
 
+# 16-11-2025
+- added add quiz button component to add new quizzes dynamically to the editor
+- added remove quiz button to each quiz component to remove itself from the editor
+- renmaed `get_quiz_info` method to `get_quiz_info_at` in `QuizManager` classfor better clarity
+- added `get_quiz_info_index` method to `QuizManager` class 
 
 # 14-11-2025
 - fixed removing selected option causing wrong option to be selected when refreshing

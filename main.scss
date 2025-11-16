@@ -217,4 +217,13 @@ body {
             padding: 8px;
         }
     }
+    .add-quiz-button {
+        align-self: center;
+        border-radius: 50%;
+        cursor: pointer;
+        user-select: none;
+        background-color: #28a745;
+        color: white;
+        padding: 4px 8px;
+    }
 }

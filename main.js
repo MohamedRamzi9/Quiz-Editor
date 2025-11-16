@@ -261,10 +261,11 @@ class QuizManager {
     }
     add_quiz_info(quiz_info) { this.quiz_infos.push(quiz_info); }
     add_quiz_infos(quiz_infos) { quiz_infos.forEach(quiz_info => this.add_quiz_info(quiz_info)); }
-    get_quiz_info(index) { return this.quiz_infos[index]; }
+    get_quiz_info_at(index) { return this.quiz_infos[index]; }
     get_quiz_infos() { return this.quiz_infos; }
-    remove_quiz_info(index) { this.quiz_infos.splice(index, 1); }
+    remove_quiz_info_at(index) { this.quiz_infos.splice(index, 1); }
     insert_quiz_info_at(index, quiz_info) { this.quiz_infos.splice(index, 0, quiz_info); }
+    get_quiz_info_index(quiz_info) { return this.quiz_infos.indexOf(quiz_info); }
 }
 
 class QuizEditor {
@@ -276,11 +277,28 @@ class QuizEditor {
     }
     initialize() {
         this.element.clear();
+        let add_quiz_button_component = (callback) => {
+            let button = dom.div().text("+").add_class("add-quiz-button")
+            .add_event("click", () => callback(button));
+            return button;
+        };
+        let add_quiz_callback = (add_quiz_component_button) => {
+            let index = this.element.get_child_index(add_quiz_component_button);
+            let new_quiz_info = new QuizInfo().question("New Question").explanation("New Explanation");
+            let new_add_quiz_component_button = add_quiz_button_component(add_quiz_callback);
+            let new_quiz_component = this.quiz_component(new_quiz_info, new_add_quiz_component_button);
+            this.element.insert_child_at(index, new_add_quiz_component_button);
+            this.element.insert_child_at(index + 1, new_quiz_component);
+            this.quiz_manager.insert_quiz_info_at(index / 2, new_quiz_info);
+        };
         for (let quiz_info of this.quiz_manager.get_quiz_infos()) {
-            this.element.add_child(
-                this.quiz_component(quiz_info)
-            );
+            let add_quiz_button = add_quiz_button_component(add_quiz_callback);
+            this.element.add_children([
+                add_quiz_button,
+                this.quiz_component(quiz_info, add_quiz_button)
+            ]);
         }
+        this.element.add_child(add_quiz_button_component(add_quiz_callback));
     }
     get_elem() { return this.element.get_elem(); }
     quiz_option_component(options_container_element, option_add_button, quiz_info, option) {
@@ -311,7 +329,7 @@ class QuizEditor {
         });
         return option_container_element;
     }
-    quiz_component(quiz_info) {
+    quiz_component(quiz_info, add_quiz_button) {
         let container_element = dom.div().add_class("quiz-component");
         dom.div().add_class("question-label").text("Question:").parent(container_element);
         dom.div().add_class("question").text(quiz_info.get_question()).parent(container_element).content_editable(true).add_event("input", e => quiz_info.question(e.target.innerText));
@@ -341,6 +359,12 @@ class QuizEditor {
         dom.div().add_class("explanation-label").text("Explanation:").parent(container_element);
         dom.div().add_class("explanation").text(quiz_info.get_explanation()).parent(container_element).content_editable(true)
         .add_event("input", e => quiz_info.explanation(e.target.innerText));
+        dom.div().add_classes(["control-button", "remove-quiz-button"]).text("Remove Quiz").parent(container_element)
+        .add_event("click", () => {
+            this.element.remove_child(container_element);
+            this.element.remove_child(add_quiz_button);
+            this.quiz_manager.remove_quiz_info_at(this.quiz_manager.get_quiz_info_index(quiz_info));
+        });
         return container_element;
     }
 }
@@ -374,13 +398,13 @@ dom.on_page_load(() => {
     quiz_editor.initialize();
     
     
-    let quiz_player = new QuizPlayer();   
-    for (let quiz_info of quiz_manager.get_quiz_infos()) {
-        quiz_player.add_quiz(new QuizForm(quiz_player, quiz_info));
-    }
-    quiz_player.initialize();
+    // let quiz_player = new QuizPlayer();   
+    // for (let quiz_info of quiz_manager.get_quiz_infos()) {
+    //     quiz_player.add_quiz(new QuizForm(quiz_player, quiz_info));
+    // }
+    // quiz_player.initialize();
     
         
-    body.add_child(quiz_player);
+    body.add_child(quiz_editor);
     
 });
